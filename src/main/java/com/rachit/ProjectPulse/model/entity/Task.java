@@ -22,9 +22,8 @@ public class Task {
 
     @Column(length = 1000)
     private String description;
-    
-    private LocalDate startDate;
 
+    private LocalDate startDate;
     private LocalDate dueDate;
 
     @Enumerated(EnumType.STRING)
@@ -33,9 +32,15 @@ public class Task {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Priority priority = Priority.MEDIUM;
+    private TaskPriority priority = TaskPriority.MEDIUM;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    // task is inside a project
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
+    // who is assigned?
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
 }

@@ -51,6 +51,27 @@ public class ProjectController {
                 projectService.searchMyProjects(email, keyword, page, size)
         );
     }
+    
+    @PostMapping("/{projectId}/members/{userId}")
+    public ResponseEntity<?> addMember(
+            @PathVariable Long projectId,
+            @PathVariable Long userId,
+            @RequestAttribute("email") String ownerEmail) {
+
+        projectService.addMember(ownerEmail, projectId, userId);
+        return ResponseEntity.ok("User added to project successfully");
+    }
+
+    @DeleteMapping("/{projectId}/members/{userId}")
+    public ResponseEntity<?> removeMember(
+            @PathVariable Long projectId,
+            @PathVariable Long userId,
+            @RequestAttribute("email") String ownerEmail) {
+
+        projectService.removeMember(ownerEmail, projectId, userId);
+        return ResponseEntity.ok("User removed from project successfully");
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ProjectDto> getProject(

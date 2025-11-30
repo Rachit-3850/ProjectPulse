@@ -14,6 +14,10 @@ public interface ProjectService {
     ProjectDto getMyProjectById(String ownerEmail, Long id);
 
     ProjectDto updateProject(String ownerEmail, Long id, ProjectDto dto);
+    
+    void addMember(String ownerEmail, Long projectId, Long userId);
+    
+    void removeMember(String ownerEmail, Long projectId, Long userId);
 
     void deleteProject(String ownerEmail, Long id);
 }

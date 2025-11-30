@@ -3,6 +3,8 @@ package com.rachit.ProjectPulse.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -45,12 +47,26 @@ public class JwtUtil {
                 .getPayload();                // ✔ New API
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         try {
-            parseClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
+            Claims claims = parseClaims(token);
+
+            String username = claims.getSubject();
+            Date expiration = claims.getExpiration();
+
+            return (username.equals(userDetails.getUsername()) && !expiration.before(new Date()));
+
+        } catch (io.jsonwebtoken.ExpiredJwtException ex) {
+            System.out.println("JWT Expired: " + ex.getMessage());
+        } catch (io.jsonwebtoken.SignatureException ex) {
+            System.out.println("Invalid JWT signature");
+        } catch (io.jsonwebtoken.MalformedJwtException ex) {
+            System.out.println("Invalid JWT token");
+        } catch (Exception ex) {
+            System.out.println("Token validation error: " + ex.getMessage());
         }
+
+        return false;
     }
+
 }

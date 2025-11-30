@@ -134,4 +134,44 @@ public class ProjectServiceImpl implements ProjectService {
 
         return project;
     }
+    
+    @Override
+    public void addMember(String ownerEmail, Long projectId, Long userId) {
+
+        Project project = getOwnedProject(ownerEmail, projectId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with id: " + userId));
+
+        if (project.getMembers().contains(user)) {
+            throw new BadRequestException("User is already a member of this project");
+        }
+
+        project.getMembers().add(user);
+        projectRepository.save(project);
+    }
+
+    @Override
+    public void removeMember(String ownerEmail, Long projectId, Long userId) {
+
+        Project project = getOwnedProject(ownerEmail, projectId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with id: " + userId));
+
+        if (!project.getMembers().contains(user)) {
+            throw new BadRequestException("User is not a member of this project");
+        }
+
+        // Prevent owner from removing themselves
+        if (project.getOwner().getId().equals(userId)) {
+            throw new BadRequestException("Owner cannot remove themselves from project");
+        }
+
+        project.getMembers().remove(user);
+        projectRepository.save(project);
+    }
+
 }
