@@ -31,21 +31,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private UserRole role;
-//    
-//    // A user can own/manage multiple projects
-//    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-//    private List<Project> ownedProjects;
+    
+    // A user can own/manage multiple projects
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Project> ownedProjects;
 //
-//    // A user can be a member of many projects
-//    @ManyToMany(mappedBy = "members")
-//    private Set<Project> memberProjects;
-//
-//    /* ------------------------------------------------------------
-//       TASK RELATIONS
-//    ------------------------------------------------------------- */
-//
-//    // A user can be assigned multiple tasks
-//    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
-//    private List<Task> assignedTasks;
+    // A user can be a member of many projects
+    @ManyToMany(mappedBy = "members")
+    private Set<Project> memberProjects;
+
 }
 

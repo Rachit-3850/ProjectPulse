@@ -1,6 +1,7 @@
 package com.rachit.ProjectPulse.model.dto;
 
 import com.rachit.ProjectPulse.model.entity.User;
+import java.util.*;
 import com.rachit.ProjectPulse.model.entity.UserRole;
 
 public class UserMapper {
@@ -14,6 +15,8 @@ public class UserMapper {
         user.setEmail(dto.getEmail());
         user.setRole(UserRole.USER);  // default role
         // password will be set in service
+        user.setOwnedProjects(new ArrayList<>());
+        user.setMemberProjects(new HashSet<>());
         return user;
     }
 
